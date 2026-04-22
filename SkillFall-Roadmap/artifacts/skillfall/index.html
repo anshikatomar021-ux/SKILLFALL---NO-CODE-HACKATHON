@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillFall — When Institutions Fall, Skills Rise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #0a0a0f;
+      color: #ffffff;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; }
+    input, select { font-family: inherit; }
+    ::selection { background: #7c3aed44; }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: #0f0f1a; }
+    ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 4px; }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 64px; z-index: 1000;
+      background: rgba(10,10,15,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid #1e1e30;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+    }
+    .logo { font-size: 22px; font-weight: 700; }
+    .logo span { color: #7c3aed; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      color: #8888aa; font-size: 14px; font-weight: 500;
+      padding: 6px 0; position: relative; transition: color 0.2s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: #7c3aed; transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      color: #fff; border-radius: 50px; padding: 10px 24px;
+      font-size: 14px; font-weight: 600; transition: transform 0.2s;
+    }
+    .btn-primary:hover { transform: scale(1.05); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh; padding: 120px 32px 60px;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: center;
+      max-width: 1280px; margin: 0 auto;
+    }
+    .pill {
+      display: inline-block;
+      background: #1e1e30; border: 1px solid #2e2e45;
+      color: #8888aa; font-size: 12px; letter-spacing: 1.5px;
+      border-radius: 50px; padding: 8px 16px; font-weight: 600;
+    }
+    .hero-eyebrow {
+      color: #7c3aed; font-size: 13px; letter-spacing: 3px;
+      font-weight: 600; margin-top: 28px;
+    }
+    .hero-subhead {
+      color: #8888aa; font-size: 14px; letter-spacing: 2px;
+      margin-top: 12px; font-weight: 500;
+    }
+    .hero-title {
+      font-size: clamp(52px, 10vw, 120px);
+      font-weight: 900; line-height: 0.95;
+      margin-top: 24px; max-width: 900px;
+      background: linear-gradient(180deg, #ff9999, #ee5a24);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .hero-body {
+      color: #8888aa; font-size: 18px; max-width: 560px;
+      margin: 24px 0 40px; line-height: 1.6;
+    }
+    .hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+    .btn-cta {
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      color: #fff; border-radius: 50px;
+      padding: 16px 32px; font-size: 16px; font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 20px 40px #7c3aed44; }
+    .btn-secondary {
+      background: transparent; border: 1px solid #2e2e45;
+      color: #fff; border-radius: 50px;
+      padding: 16px 32px; font-size: 16px; font-weight: 600;
+      transition: border-color 0.2s;
+    }
+    .btn-secondary:hover { border-color: #7c3aed; }
+
+    .ghost-words {
+      position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      width: 50%; height: 80%; pointer-events: none; overflow: hidden;
+      display: none;
+    }
+    .ghost-words span {
+      position: absolute; color: #ffffff08;
+      font-size: 64px; font-weight: 800; white-space: nowrap;
+    }
+    @media (min-width: 1024px) { .ghost-words { display: block; } }
+
+    .particles {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    }
+    .particle {
+      position: absolute; border-radius: 50%; opacity: 0.4;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    .hero > *:not(.particles):not(.ghost-words) { position: relative; z-index: 1; }
+
+    /* STATS */
+    .stats {
+      background: #0f0f1a;
+      border-top: 1px solid #1e1e30;
+      border-bottom: 1px solid #1e1e30;
+      padding: 60px 32px;
+    }
+    .stats-inner {
+      max-width: 1280px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 32px; align-items: center;
+    }
+    .stat { text-align: center; padding: 0 24px; position: relative; }
+    .stat:not(:last-child)::after {
+      content: ''; position: absolute; right: 0; top: 10%; bottom: 10%;
+      width: 1px; background: #1e1e30;
+    }
+    .stat-num { font-size: 48px; font-weight: 800; color: #fff; }
+    .stat-label { font-size: 13px; color: #8888aa; max-width: 180px; margin: 8px auto 0; }
+
+    /* SECTIONS */
+    section.content {
+      padding: 100px 32px; max-width: 1280px; margin: 0 auto;
+    }
+    .section-heading {
+      font-size: clamp(32px, 5vw, 52px); font-weight: 800;
+      margin-top: 16px; color: #fff;
+    }
+    .section-sub {
+      color: #8888aa; font-size: 16px; margin-top: 12px; max-width: 600px;
+    }
+
+    /* CRISIS */
+    .crisis-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 40px; margin-top: 48px;
+    }
+    .crisis-cards { display: flex; flex-direction: column; gap: 16px; }
+    .crisis-card {
+      background: #13131f; border: 1px solid #1e1e30;
+      border-left: 3px solid #7c3aed; border-radius: 12px; padding: 24px;
+    }
+    .crisis-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .crisis-card h3 { font-size: 17px; color: #fff; margin-bottom: 8px; }
+    .crisis-card p { color: #8888aa; font-size: 14px; line-height: 1.6; }
+    .quote-block {
+      background: #13131f; border: 1px solid #1e1e30; border-radius: 16px;
+      padding: 40px; position: relative; display: flex; flex-direction: column; gap: 20px;
+    }
+    .quote-mark {
+      position: absolute; top: 12px; left: 24px;
+      font-size: 120px; color: #7c3aed; opacity: 0.3;
+      font-family: Georgia, serif; line-height: 1;
+    }
+    .quote-text {
+      color: #fff; font-size: 22px; font-style: italic;
+      line-height: 1.4; position: relative; z-index: 1; padding-top: 40px;
+    }
+    .quote-attr { color: #8888aa; font-size: 13px; }
+    .red-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .red-tag {
+      background: #ff6b6b22; color: #ff6b6b; border: 1px solid #ff6b6b44;
+      border-radius: 50px; padding: 6px 14px; font-size: 12px; font-weight: 600;
+    }
+    .target-line {
+      color: #7c3aed; font-size: 15px; font-weight: 500; margin-top: 8px;
+    }
+
+    /* AI REBUILDER */
+    #ai-rebuilder { background: #0f0f1a; }
+    #ai-rebuilder.content { max-width: none; }
+    .ai-inner { max-width: 1280px; margin: 0 auto; }
+    .form-card {
+      background: #13131f; border: 1px solid #1e1e30; border-radius: 20px;
+      padding: 36px; max-width: 780px; margin: 48px auto 0;
+    }
+    .form-card h3 { font-size: 22px; font-weight: 700; color: #fff; }
+    .form-card .form-sub {
+      color: #8888aa; font-size: 14px; margin-top: 4px; margin-bottom: 28px;
+    }
+    .form-grid { display: grid; gap: 20px; }
+    .form-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .field-label {
+      color: #8888aa; font-size: 11px; letter-spacing: 1.5px;
+      font-weight: 600; display: block; margin-bottom: 8px;
+    }
+    .field-input, .field-select {
+      background: #0a0a0f; border: 1px solid #2e2e45; border-radius: 8px;
+      color: #fff; padding: 12px 16px; width: 100%; font-size: 15px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .field-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238888aa' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+    .field-input:focus, .field-select:focus {
+      outline: none; border-color: #7c3aed;
+      box-shadow: 0 0 0 3px #7c3aed22;
+    }
+    .field-input::placeholder { color: #5555aa; }
+    .field-error {
+      border-color: #ef4444 !important;
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-8px); }
+      80% { transform: translateX(8px); }
+    }
+    .field-hint {
+      color: #5555aa; font-size: 12px; margin-top: 6px; min-height: 18px;
+    }
+    .gen-btn {
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      color: #fff; border-radius: 12px; padding: 18px;
+      font-size: 16px; font-weight: 700; width: 100%;
+      margin-top: 28px;
+      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+    .gen-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 12px 32px #7c3aed44; }
+    .gen-btn:active { transform: translateY(0) scale(0.99); }
+
+    .progress-panel {
+      background: #13131f; border: 1px solid #1e1e30; border-radius: 12px;
+      padding: 24px; max-width: 780px; margin: 16px auto 0; display: none;
+    }
+    .progress-panel-text { color: #fff; font-size: 15px; margin-bottom: 12px; }
+    .progress-track {
+      background: #1e1e30; border-radius: 50px; height: 8px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #7c3aed, #3b82f6, #00d4aa);
+      border-radius: 50px; transition: width 1.5s ease;
+    }
+
+    .roadmap-output { display: none; margin-top: 24px; }
+    .success-meter {
+      background: #13131f; border: 1px solid #1e1e30; border-radius: 12px;
+      padding: 24px; max-width: 780px; margin: 0 auto 24px;
+    }
+    .success-row {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .success-row .left { color: #8888aa; font-size: 12px; letter-spacing: 1.5px; font-weight: 600; }
+    .success-row .right { color: #fff; font-weight: 700; font-size: 18px; }
+    .success-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #ef4444, #f59e0b, #00d4aa);
+      border-radius: 50px; transition: width 1.2s ease;
+    }
+    .success-label { color: #8888aa; font-size: 13px; margin-top: 8px; }
+
+    .cards-container { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; }
+
+    .actions-row {
+      max-width: 780px; margin: 24px auto 0; display: flex; gap: 12px;
+    }
+    .action-btn {
+      background: #13131f; border: 1px solid #2e2e45;
+      color: #fff; border-radius: 8px; padding: 12px 24px;
+      font-size: 14px; font-weight: 500; transition: border-color 0.2s;
+    }
+    .action-btn:hover { border-color: #7c3aed; }
+
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #13131f; border: 1px solid #00d4aa44;
+      border-radius: 10px; padding: 14px 20px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; color: #fff;
+      box-shadow: 0 8px 32px #00000066;
+      transform: translateX(120%); opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 2000;
+    }
+
+    /* HOW IT WORKS */
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+      margin-top: 48px;
+    }
+    .step-card {
+      background: #13131f; border: 1px solid #1e1e30; border-radius: 16px;
+      padding: 28px; text-align: center;
+    }
+    .step-num {
+      font-size: 11px; color: #7c3aed; letter-spacing: 2px;
+      font-weight: 700; margin-bottom: 12px;
+    }
+    .step-icon { font-size: 36px; margin-bottom: 12px; }
+    .step-card h3 { color: #fff; font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .step-card p { color: #8888aa; font-size: 14px; line-height: 1.6; }
+
+    /* TICKER */
+    .ticker-section {
+      background: #0f0f1a; border-top: 1px solid #1e1e30;
+      border-bottom: 1px solid #1e1e30;
+      padding: 20px 0; overflow: hidden;
+    }
+    .ticker-track {
+      display: flex; white-space: nowrap; width: max-content;
+      animation: ticker 30s linear infinite;
+    }
+    .ticker-item {
+      color: #8888aa; font-size: 14px; margin-right: 64px;
+    }
+    .ticker-item .dot { color: #2e2e45; margin-left: 64px; }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* FUTURE */
+    .future-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      margin-top: 48px;
+    }
+    .future-card {
+      background: #13131f; border: 1px solid #1e1e30; border-radius: 16px;
+      padding: 28px;
+    }
+    .future-badge {
+      display: inline-block;
+      background: #7c3aed22; color: #8b5cf6; border: 1px solid #7c3aed44;
+      border-radius: 50px; padding: 4px 12px;
+      font-size: 12px; font-weight: 700;
+    }
+    .future-card .icon { font-size: 32px; margin: 16px 0; }
+    .future-card h3 { color: #fff; font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .future-card p { color: #8888aa; font-size: 14px; line-height: 1.6; }
+
+    /* FOOTER */
+    footer {
+      background: #0a0a0f; border-top: 1px solid #1e1e30; padding: 40px 32px;
+    }
+    .footer-inner { max-width: 1280px; margin: 0 auto; }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-tagline { color: #8888aa; font-size: 13px; margin-top: 4px; }
+    .footer-credit { color: #555577; font-size: 13px; }
+    .footer-bottom {
+      text-align: center; color: #333355; font-size: 12px;
+      margin-top: 24px; padding-top: 24px; border-top: 1px solid #1e1e30;
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .navbar { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 20px 60px; }
+      .hero-title { font-size: clamp(42px, 10vw, 80px); }
+      .stats-inner { grid-template-columns: 1fr; gap: 24px; }
+      .stat:not(:last-child)::after { display: none; }
+      section.content { padding: 60px 20px; }
+      .crisis-grid { grid-template-columns: 1fr; }
+      .form-card { padding: 24px; }
+      .form-grid.cols-3 { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; }
+      .future-grid { grid-template-columns: 1fr; }
+      .footer-top { flex-direction: column; align-items: flex-start; }
+      .day-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* CHATBOT */
+    .chat-trigger {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, #7c3aed, #3b82f6);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 32px rgba(124, 58, 237, 0.4);
+      cursor: pointer; z-index: 2000;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .chat-trigger:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(124, 58, 237, 0.6); }
+    .chat-trigger svg { width: 28px; height: 28px; fill: #fff; }
+
+    .chat-window {
+      position: fixed; bottom: 100px; right: 24px;
+      width: 380px; height: 500px;
+      background: #13131f; border: 1px solid #1e1e30;
+      border-radius: 20px; display: none; flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      z-index: 2000; overflow: hidden;
+      animation: chatIn 0.4s cubic-bezier(0.17, 0.88, 0.32, 1.28);
+    }
+    @keyframes chatIn {
+      from { transform: translateY(40px) scale(0.9); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .chat-header {
+      background: #1e1e30; padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid #2e2e45;
+    }
+    .chat-header h3 { font-size: 15px; font-weight: 700; color: #fff; }
+    .chat-header .status { font-size: 11px; color: #00d4aa; display: flex; align-items: center; gap: 6px; }
+    .chat-header .status::before { content: ''; width: 6px; height: 6px; background: #00d4aa; border-radius: 50%; }
+
+    .chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .chat-message { max-width: 85%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
+    .msg-bot { background: #1e1e30; color: #ddd; align-self: flex-start; border-bottom-left-radius: 2px; }
+    .msg-user { background: #7c3aed; color: #fff; align-self: flex-end; border-bottom-right-radius: 2px; }
+
+    .chat-footer { padding: 16px; background: #1e1e30; display: flex; gap: 10px; border-top: 1px solid #2e2e45; }
+    .chat-input {
+      flex: 1; background: #0a0a0f; border: 1px solid #2e2e45; border-radius: 8px;
+      color: #fff; padding: 10px 14px; font-size: 14px; outline: none;
+    }
+    .chat-send {
+      background: #7c3aed; color: #fff; width: 40px; height: 40px;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.2s;
+    }
+    .chat-send:hover { opacity: 0.9; }
+
+    .typing-dots { display: flex; gap: 4px; padding: 4px 8px; }
+    .dot { width: 6px; height: 6px; background: #8888aa; border-radius: 50%; animation: dotBounce 1.4s infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotBounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+    @media (max-width: 480px) {
+      .chat-window { width: calc(100% - 40px); right: 20px; bottom: 90px; height: 450px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">Skill<span>Fall</span></div>
+  <div class="nav-links">
+    <a href="#problem" data-section="problem">Problem</a>
+    <a href="#ai-rebuilder" data-section="ai-rebuilder">AI Rebuilder</a>
+    <a href="#how-it-works" data-section="how-it-works">How It Works</a>
+    <a href="#future" data-section="future">Future</a>
+  </div>
+  <button class="btn-primary" onclick="document.getElementById('ai-rebuilder').scrollIntoView({behavior:'smooth'})">Start Now</button>
+</nav>
+
+<section class="hero">
+  <div class="particles" id="particles"></div>
+  <div class="ghost-words">
+    <span style="top:10%; left:10%; transform:rotate(-8deg);">Prompt Engineering</span>
+    <span style="top:30%; left:40%; transform:rotate(6deg);">UI Design</span>
+    <span style="top:50%; left:5%; transform:rotate(-3deg);">Financial Modeling</span>
+    <span style="top:70%; left:30%; transform:rotate(10deg);">Health Content</span>
+    <span style="top:85%; left:55%; transform:rotate(-6deg);">AgriTech</span>
+    <span style="top:20%; left:60%; transform:rotate(4deg);">Freelancing</span>
+  </div>
+  <div>
+    <span class="pill">● AI-POWERED • HACKATHON PROTOTYPE • 2026</span>
+  </div>
+  <div class="hero-eyebrow">SKILLFALL</div>
+  <div class="hero-subhead">WHEN INSTITUTIONS FALL, SKILLS RISE.</div>
+  <h1 class="hero-title">THE SYSTEM HAS<br>COLLAPSED.<br>WHAT NOW?</h1>
+  <p class="hero-body">Degrees no longer guarantee jobs. Institutions have failed. But your skills can still rebuild your future — one roadmap at a time.</p>
+  <div class="hero-ctas">
+    <button class="btn-cta" onclick="document.getElementById('ai-rebuilder').scrollIntoView({behavior:'smooth'})">🚀 Rebuild My Future</button>
+    <button class="btn-secondary" onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">Learn More</button>
+  </div>
+</section>
+
+<section class="stats" id="statsSection">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num" id="stat1">0M+</div>
+      <div class="stat-label">Students left without a clear path forward</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat2">₹0</div>
+      <div class="stat-label">Perceived value of a degree in a skills-first economy</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat3">0%</div>
+      <div class="stat-label">Graduates unemployable due to skill gap</div>
+    </div>
+  </div>
+</section>
+
+<section class="content" id="problem">
+  <span class="pill">THE CRISIS</span>
+  <h2 class="section-heading">The Graduate Paradox</h2>
+  <div class="crisis-grid">
+    <div class="crisis-cards">
+      <div class="crisis-card">
+        <div class="icon">📉</div>
+        <h3>Graduate unemployment (11.2%) is 4× the national average</h3>
+        <p>44% of degree holders can't find work — because degrees no longer signal relevant skills.</p>
+      </div>
+      <div class="crisis-card">
+        <div class="icon">🏛️</div>
+        <h3>Structural Mismatch</h3>
+        <p>The system overproduces general degrees while the market demands 1M+ AI/tech professionals.</p>
+      </div>
+      <div class="crisis-card">
+        <div class="icon">🌐</div>
+        <h3>No Personalised Roadmap Exists</h3>
+        <p>Still there is no platform that understands who you are — your income need, your internet access, your interests — and builds a personalised survival path just for you.</p>
+      </div>
+    </div>
+    <div class="quote-block">
+      <div class="quote-mark">"</div>
+      <div class="quote-text">"45% of graduates say degrees are useless for 2026 jobs"</div>
+      <div class="quote-attr">— 2026 Student Survey</div>
+      <div class="red-tags">
+        <span class="red-tag">Board exams cancelled</span>
+        <span class="red-tag">Campus placements frozen</span>
+        <span class="red-tag">Universities shutting down</span>
+      </div>
+      <div class="target-line">→ Target: 140M Indian graduates + 2.6B global learners in zero-data zones</div>
+    </div>
+  </div>
+</section>
+
+<section class="content" id="ai-rebuilder" style="background:#0f0f1a; max-width:none;">
+  <div class="ai-inner" style="max-width:1280px; margin:0 auto;">
+    <span class="pill">CORE FEATURE</span>
+    <h2 class="section-heading">AI Skill Rebuilder</h2>
+    <p class="section-sub">Answer four questions. Get a personalized survival roadmap generated in seconds.</p>
+
+    <div class="form-card">
+      <h3>Build Your Roadmap</h3>
+      <div class="form-sub">Tailored to your exact situation — no generics.</div>
+
+      <div class="form-grid cols-3">
+        <div>
+          <label class="field-label">YOUR AGE</label>
+          <input type="number" id="ageInput" class="field-input" placeholder="e.g. 21" />
+        </div>
+        <div>
+          <label class="field-label">PRIMARY INTEREST</label>
+          <select id="interestSelect" class="field-select">
+            <option value="" disabled selected>Select your field</option>
+            <option value="technology">Technology</option>
+            <option value="design">Design</option>
+            <option value="business">Business</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="creative arts">Creative Arts</option>
+            <option value="finance">Finance</option>
+            <option value="agriculture">Agriculture</option>
+            <option value="other">Other / General Skills</option>
+          </select>
+          <div class="field-hint" id="fieldHint"></div>
+        </div>
+        <div>
+          <label class="field-label">INCOME URGENCY</label>
+          <select id="urgencySelect" class="field-select">
+            <option value="" disabled selected>When do you need income?</option>
+            <option value="immediate">Immediately (within 1 month)</option>
+            <option value="short">Short-term (1–3 months)</option>
+            <option value="medium">Medium-term (3–6 months)</option>
+            <option value="flexible">Flexible / Learning first</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid" style="margin-top:20px;">
+        <div style="max-width:320px;">
+          <label class="field-label">INTERNET ACCESS</label>
+          <select id="internetSelect" class="field-select">
+            <option value="" disabled selected>Your connectivity level</option>
+            <option value="high">High (4G/5G/WiFi always)</option>
+            <option value="medium">Medium (sometimes limited)</option>
+            <option value="low">Low (2G or offline often)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid cols-3" style="margin-top:20px;">
+        <div>
+          <label class="field-label">CURRENT SKILL LEVEL</label>
+          <select id="skillSelect" class="field-select">
+            <option value="" disabled selected>Your level</option>
+            <option value="beginner">Beginner (just starting)</option>
+            <option value="intermediate">Intermediate (some experience)</option>
+            <option value="advanced">Advanced (experienced)</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">TIME AVAILABILITY</label>
+          <select id="timeSelect" class="field-select">
+            <option value="" disabled selected>Hours per day</option>
+            <option value="1-2">1–2 hours</option>
+            <option value="3-4">3–4 hours</option>
+            <option value="5-6">5–6 hours</option>
+            <option value="fulltime">Full-time (8+ hours)</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">RISK TOLERANCE (OPTIONAL)</label>
+          <select id="riskSelect" class="field-select">
+            <option value="" disabled selected>Select level</option>
+            <option value="low">Low (safe, steady path)</option>
+            <option value="medium">Medium (balanced approach)</option>
+            <option value="high">High (aggressive growth)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="gen-btn" id="generateBtn">Generate My Survival Roadmap ⚡</button>
+    </div>
+
+    <div class="progress-panel" id="progressPanel">
+      <div class="progress-panel-text">Building your roadmap...</div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <div class="roadmap-output" id="roadmapOutput">
+      <div class="success-meter">
+        <div class="success-row">
+          <span class="left">SUCCESS PROBABILITY</span>
+          <span class="right" id="successPercent">0%</span>
+        </div>
+        <div class="progress-track"><div class="success-fill" id="successFill"></div></div>
+        <div class="success-label" id="successLabel"></div>
+      </div>
+      <div class="cards-container" id="cardsContainer"></div>
+      <div class="actions-row">
+        <button class="action-btn" id="copyBtn">📋 Copy Roadmap</button>
+        <button class="action-btn" id="resetBtn">🔄 Start Over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content" id="how-it-works">
+  <span class="pill">SIMPLE PROCESS</span>
+  <h2 class="section-heading">How SkillFall Works</h2>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-icon">📝</div>
+      <h3>Tell Us About You</h3>
+      <p>Share your age, field, income urgency, internet access, and skill level. 4 fields. 30 seconds.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-icon">🤖</div>
+      <h3>AI Builds Your Roadmap</h3>
+      <p>Our algorithm generates a personalised 5-milestone survival path tailored to your exact constraints.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-icon">📅</div>
+      <h3>Follow Day-by-Day</h3>
+      <p>Each milestone has a detailed day-by-day breakdown so you always know exactly what to do next.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-icon">💰</div>
+      <h3>Earn & Level Up</h3>
+      <p>Track your progress from FREE skills → INCOME milestones → COMMUNITY status as you rebuild.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ticker-section">
+  <div class="ticker-track" id="tickerTrack"></div>
+</section>
+
+<section class="content" id="future">
+  <span class="pill">WHAT'S NEXT</span>
+  <h2 class="section-heading">The SkillFall Vision</h2>
+  <div class="future-grid">
+    <div class="future-card">
+      <span class="future-badge">Q3 2026</span>
+      <div class="icon">🤖</div>
+      <h3>Live Gemini AI Integration</h3>
+      <p>Replace static roadmaps with real-time Gemini API calls that generate hyper-personalised, dynamic roadmaps based on your inputs.</p>
+    </div>
+    <div class="future-card">
+      <span class="future-badge">Q4 2026</span>
+      <div class="icon">🌐</div>
+      <h3>Offline PWA Mode</h3>
+      <p>Progressive Web App with full offline support. Download your roadmap and follow it even with zero internet — built for rural India.</p>
+    </div>
+    <div class="future-card">
+      <span class="future-badge">2027</span>
+      <div class="icon">🏆</div>
+      <h3>Community & Cohorts</h3>
+      <p>Peer accountability groups, mentor matching, and cohort-based learning. Skills are stronger when built together.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="logo">Skill<span>Fall</span></div>
+        <div class="footer-tagline">When Institutions Fall, Skills Rise.</div>
+      </div>
+      <div class="footer-credit">Built with ❤️ by Team SlayStack | Hackathon Prototype 2026</div>
+    </div>
+    <div class="footer-bottom">© 2026 SkillFall. For educational purposes. This is a hackathon prototype.</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✅ 🗺️ Your custom survival roadmap is ready!</div>
+
+<!-- CHATBOT -->
+<div class="chat-trigger" id="chatTrigger" title="SkillFall Recovery Assistant">
+  <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.821.487 3.53 1.338 5L2 22l5-1.338C8.47 21.513 10.179 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18c-1.477 0-2.866-.395-4.062-1.082l-.291-.168-3.037.812.812-3.037-.168-.291A7.953 7.953 0 014 12c0-4.411 3.589-8 8-8s8 3.589 8 8-3.589 8-8 8z"/><circle cx="8" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="16" cy="12" r="1.5"/></svg>
+</div>
+
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <div>
+      <h3>Recovery Assistant</h3>
+      <div class="status">Always here to help</div>
+    </div>
+    <button id="closeChat" style="background:none; color:#8888aa; font-size:20px;">&times;</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <div class="chat-message msg-bot">
+      Hi! I'm your SkillFall Recovery Assistant. Whether you're feeling stressed about placements, confused about your path, or just need some motivation, I'm here to listen. How are you feeling today?
+    </div>
+  </div>
+  <div class="chat-footer">
+    <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." />
+    <button class="chat-send" id="chatSendBtn">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+const roadmapData = {
+  "technology": [
+    { id: 1, accentColor: "#00d4aa", badge: "FREE", timeLabel: "Week 1-2", title: "Master Prompt Engineering", description: "Learn to communicate effectively with AI to 10x your productivity and build faster than anyone around you.", days: [
+      { dayRange: "Day 1-3", title: "Introduction to AI & LLMs", bullets: ["Understanding Tokens & Context Windows", "System vs. User Prompts", "Basic Prompting Techniques"] },
+      { dayRange: "Day 4-7", title: "Advanced Frameworks", bullets: ["Chain-of-Thought Prompting", "Few-Shot vs. Zero-Shot", "Implementing Persona Patterns"] },
+      { dayRange: "Day 8-14", title: "Real-world Applications", bullets: ["Automating Content Creation", "Bug Fixing via Prompts", "Building a Prompt Library"] }
+    ]},
+    { id: 2, accentColor: "#00b4d8", badge: "FREE", timeLabel: "Week 3-4", title: "Build 2 Portfolio Projects", description: "Construct real-world applications to showcase your technical skills to every potential client or employer.", days: [
+      { dayRange: "Day 15-18", title: "Project 1: Launch", bullets: ["Landing Page Architecture", "Responsive Design Patterns", "Deployment on Vercel"] },
+      { dayRange: "Day 19-22", title: "Interactive Features", bullets: ["Adding JS Components", "Form Handling", "Basic API Integration"] },
+      { dayRange: "Day 23-30", title: "Project 2: Advanced", bullets: ["Complex UI/UX Design", "Local Storage Implementation", "Final Documentation"] }
+    ]},
+    { id: 3, accentColor: "#f59e0b", badge: "INCOME", timeLabel: "Month 2", title: "Launch on Fiverr & Upwork", description: "Set up professional profiles and start bidding on high-value gigs. Your first client is closer than you think.", days: [
+      { dayRange: "Day 1-5", title: "Profile Setup", bullets: ["Writing a Winning Bio", "Portfolio Screenshots", "Pricing Strategy"] },
+      { dayRange: "Day 6-15", title: "First Proposals", bullets: ["Crafting Winning Proposals", "Targeting Small Budgets First", "Response Rate Optimization"] },
+      { dayRange: "Day 16-30", title: "First Client", bullets: ["Delivering First Project", "Getting 5-Star Review", "Upselling Strategy"] }
+    ]},
+    { id: 4, accentColor: "#f97316", badge: "INCOME", timeLabel: "Month 3", title: "Hit ₹15,000/month", description: "Reach your first consistent income milestone. Stack gigs, raise rates, and build repeat clients.", days: [
+      { dayRange: "Day 1-10", title: "Scale Outreach", bullets: ["Applying to 10 Gigs Daily", "Niche Down Strategy", "Building Repeat Clients"] },
+      { dayRange: "Day 11-20", title: "Raise Rates", bullets: ["Packaging Services", "Moving from ₹500 to ₹2,000 per gig", "Client Retention"] },
+      { dayRange: "Day 21-30", title: "Automate", bullets: ["Templates for Proposals", "Batch Delivery Systems", "Outsourcing Small Tasks"] }
+    ]},
+    { id: 5, accentColor: "#8b5cf6", badge: "COMMUNITY", timeLabel: "Month 6", title: "Full-Stack Developer Title", description: "Achieve proficiency across the stack, join the global developer community, and unlock ₹40,000+ month potential.", days: [
+      { dayRange: "Day 1-15", title: "Backend Basics", bullets: ["Node.js & Express Setup", "REST API Design", "Database with MongoDB"] },
+      { dayRange: "Day 16-25", title: "Deployment", bullets: ["Hosting on Railway/Render", "Environment Variables", "CI/CD Basics"] },
+      { dayRange: "Day 26-30", title: "Community", bullets: ["Joining Dev Communities", "Open Source Contribution", "LinkedIn Profile Optimization"] }
+    ]}
+  ],
+  "design": [
+    { id: 1, accentColor: "#00d4aa", badge: "FREE", timeLabel: "Week 1-2", title: "Master Canva & Figma", description: "Learn the two most in-demand design tools. Every freelance client needs someone who can use these confidently.", days: [
+      { dayRange: "Day 1-4", title: "Canva Mastery", bullets: ["Template Customization Techniques", "Brand Kit Setup & Color Systems", "Social Media Post Design"] },
+      { dayRange: "Day 5-9", title: "Figma Basics", bullets: ["Frame & Layer System", "Component Creation", "Auto Layout Fundamentals"] },
+      { dayRange: "Day 10-14", title: "Design Principles", bullets: ["Color Theory Basics", "Typography Pairing Rules", "Visual Hierarchy & Spacing"] }
+    ]},
+    { id: 2, accentColor: "#00b4d8", badge: "FREE", timeLabel: "Week 3-4", title: "Build a Design Portfolio", description: "Create 6 real-world design samples across different industries. Proof of work beats a degree every time.", days: [
+      { dayRange: "Day 15-18", title: "Social Media Designs", bullets: ["10 Instagram Post Designs", "5 Story Templates", "3 LinkedIn Banners"] },
+      { dayRange: "Day 19-22", title: "Brand Identity Work", bullets: ["Logo Design Exercise", "Brand Color Palette Creation", "Business Card Mockup"] },
+      { dayRange: "Day 23-28", title: "Presentation Decks", bullets: ["Pitch Deck Template", "Product Showcase Deck", "Case Study Layout"] }
+    ]},
+    { id: 3, accentColor: "#f59e0b", badge: "INCOME", timeLabel: "Month 2", title: "Get First Design Client", description: "Land paid design work on Fiverr, Upwork, or Instagram. Your portfolio does the talking.", days: [
+      { dayRange: "Day 1-7", title: "Platform Setup", bullets: ["Fiverr Design Gig Creation", "Portfolio on Behance", "Instagram Design Page Setup"] },
+      { dayRange: "Day 8-18", title: "Outreach", bullets: ["Targeting Small Businesses", "Sending 10 DMs Daily", "Cold Email Templates"] },
+      { dayRange: "Day 19-30", title: "First Delivery", bullets: ["Client Brief Template", "Revision Workflow", "Invoice & Payment Setup"] }
+    ]},
+    { id: 4, accentColor: "#f97316", badge: "INCOME", timeLabel: "Month 3", title: "Hit ₹12,000/month", description: "Stack multiple small design gigs into consistent monthly income. Package and price your work smartly.", days: [
+      { dayRange: "Day 1-10", title: "Productize Services", bullets: ["Logo Package for ₹1,500", "Social Media Bundle for ₹3,000", "Pitch Deck for ₹2,500"] },
+      { dayRange: "Day 11-20", title: "Referral System", bullets: ["Ask Every Client for Referral", "Testimonial Collection", "Google Reviews Setup"] },
+      { dayRange: "Day 21-30", title: "Retainer Model", bullets: ["Monthly Social Media Management", "Retained Brand Designer Role", "Recurring Revenue Setup"] }
+    ]},
+    { id: 5, accentColor: "#8b5cf6", badge: "COMMUNITY", timeLabel: "Month 6", title: "UI/UX Designer for Startups", description: "Level up from graphic work to high-paying product design. Startups pay ₹30,000–₹80,000/month for good UX.", days: [
+      { dayRange: "Day 1-15", title: "UX Principles", bullets: ["User Research Methods", "Wireframing Techniques", "Prototyping in Figma"] },
+      { dayRange: "Day 16-25", title: "Case Studies", bullets: ["Redesign an Existing App", "Document Design Decisions", "Present on Behance"] },
+      { dayRange: "Day 26-30", title: "Job Search", bullets: ["Apply to Startup Design Roles", "Build Design Twitter/X Presence", "Join Designer Communities"] }
+    ]}
+  ],
+  "business": [
+    { id: 1, accentColor: "#00d4aa", badge: "FREE", timeLabel: "Week 1-2", title: "Learn Business Fundamentals Fast", description: "Build a working knowledge of sales, marketing, and operations. Business skills are the fastest path to consulting income.", days: [
+      { dayRange: "Day 1-4", title: "Sales Basics", bullets: ["Understanding Buyer Psychology", "Cold Outreach Scripts", "Objection Handling Techniques"] },
+      { dayRange: "Day 5-9", title: "Marketing Essentials", bullets: ["Content Marketing Strategy", "Email Marketing Basics", "Social Media for Business"] },
+      { dayRange: "Day 10-14", title: "Operations & Finance", bullets: ["Basic P&L Understanding", "Invoice & Contracts", "Time Management Systems"] }
+    ]},
+    { id: 2, accentColor: "#00b4d8", badge: "FREE", timeLabel: "Week 3-4", title: "Launch a Micro-Consulting Offer", description: "Package your knowledge into a service you can sell in 30 days. You do not need experience — you need positioning.", days: [
+      { dayRange: "Day 15-18", title: "Niche Down", bullets: ["Identify Your 1 Strongest Skill", "Define Target Customer Profile", "Research 3 Competitors"] },
+      { dayRange: "Day 19-22", title: "Package It", bullets: ["Build a 1-Page Offer Document", "Pricing Strategy", "Positioning Statement"] },
+      { dayRange: "Day 23-28", title: "Validate It", bullets: ["Pitch to 10 People", "Get 1 Discovery Call", "Refine Based on Feedback"] }
+    ]},
+    { id: 3, accentColor: "#f59e0b", badge: "INCOME", timeLabel: "Month 2", title: "Land First Consulting Client", description: "Convert outreach into paid consulting worth ₹5,000–₹15,000 per project. One client changes everything.", days: [
+      { dayRange: "Day 1-7", title: "LinkedIn Presence", bullets: ["Optimize LinkedIn Profile", "Post Thought Leadership Daily", "Connect with 20 Business Owners"] },
+      { dayRange: "Day 8-18", title: "Outreach Campaign", bullets: ["15 Cold DMs Per Day", "Follow-up Sequence", "Discovery Call Script"] },
+      { dayRange: "Day 19-30", title: "Close First Client", bullets: ["Proposal Template", "Scope of Work Document", "Onboarding Checklist"] }
+    ]},
+    { id: 4, accentColor: "#f97316", badge: "INCOME", timeLabel: "Month 3", title: "Hit ₹20,000/month", description: "Scale consulting income through referrals and repeat business. One client becomes five with the right system.", days: [
+      { dayRange: "Day 1-10", title: "Deliver Excellently", bullets: ["Weekly Client Check-ins", "Result Documentation", "Case Study Creation"] },
+      { dayRange: "Day 11-20", title: "Referral Engine", bullets: ["Ask for Introductions", "Incentivize Referrals", "Build a Waitlist"] },
+      { dayRange: "Day 21-30", title: "Raise Rates", bullets: ["Repackage at Higher Price Point", "Target Bigger Companies", "Productize Expertise"] }
+    ]},
+    { id: 5, accentColor: "#8b5cf6", badge: "COMMUNITY", timeLabel: "Month 6", title: "Business Strategist / Startup Advisor", description: "Build a reputation and expand into high-ticket advisory. Top advisors earn ₹50,000–₹2,00,000 per engagement.", days: [
+      { dayRange: "Day 1-15", title: "Authority Building", bullets: ["Write 30 LinkedIn Articles", "Guest on 2 Podcasts", "Start a Free Newsletter"] },
+      { dayRange: "Day 16-25", title: "High-Ticket Offers", bullets: ["Create a ₹50,000 Strategy Package", "Target Funded Startups", "Build Application-Only Process"] },
+      { dayRange: "Day 26-30", title: "Scale", bullets: ["Hire First Virtual Assistant", "Build SOPs for All Work", "Launch a Cohort Program"] }
+    ]}
+  ],
+  "healthcare": [
+    { id: 1, accentColor: "#00d4aa", badge: "FREE", timeLabel: "Week 1-2", title: "Learn Health Content Creation", description: "Build expertise in creating medical and wellness content. Health is one of the highest-paying niches online.", days: [
+      { dayRange: "Day 1-4", title: "Medical Writing Basics", bullets: ["Simplifying Complex Medical Topics", "Citing Credible Health Sources", "Health Writing Style Guide"] },
+      { dayRange: "Day 5-9", title: "Content Formats", bullets: ["Blog Posts for Health Websites", "Social Media Health Tips", "Short-form Health Videos"] },
+      { dayRange: "Day 10-14", title: "Tools & Platforms", bullets: ["Canva for Health Infographics", "YouTube for Health Content", "Instagram Health Niche Strategy"] }
+    ]},
+    { id: 2, accentColor: "#00b4d8", badge: "FREE", timeLabel: "Week 3-4", title: "Build a Health Content Portfolio", description: "Create 10 pieces of health content across formats. Clinics and wellness brands need this every single day.", days: [
+      { dayRange: "Day 15-18", title: "Written Content", bullets: ["3 Long-form Health Articles", "5 Explainer Infographics", "2 Email Newsletter Samples"] },
+      { dayRange: "Day 19-22", title: "Video Content", bullets: ["3 Short Health Reels", "1 Explainer YouTube Video", "Thumbnail Design for Videos"] },
+      { dayRange: "Day 23-28", title: "Niche Down", bullets: ["Choose Your Health Niche", "Research Top Health Creators", "Identify Content Gaps"] }
+    ]},
+    { id: 3, accentColor: "#f59e0b", badge: "INCOME", timeLabel: "Month 2", title: "Get First Health Content Client", description: "Land paid work writing for clinics, wellness brands, or health apps. The demand is massive and underserved.", days: [
+      { dayRange: "Day 1-7", title: "Platform Outreach", bullets: ["Upwork Health Writing Profile Setup", "Pitch to 5 Health Blogs", "Contact Local Clinics via Email"] },
+      { dayRange: "Day 8-18", title: "Cold Outreach", bullets: ["Target Supplement Brands", "Pitch Telemedicine Startups", "Wellness Coach Content Outreach"] },
+      { dayRange: "Day 19-30", title: "First Delivery", bullets: ["Health Article Workflow", "Medical Fact-Check Process", "Client Approval System"] }
+    ]},
+    { id: 4, accentColor: "#f97316", badge: "INCOME", timeLabel: "Month 3", title: "Hit ₹10,000/month", description: "Stack health writing and content gigs into consistent income. Specialize to charge premium rates.", days: [
+      { dayRange: "Day 1-10", title: "Multiple Clients", bullets: ["Maintain 3 Regular Clients", "Batch Content Production", "Weekly Content Calendar"] },
+      { dayRange: "Day 11-20", title: "Specialize", bullets: ["Choose Medical, Wellness or Fitness", "Build Niche Authority", "Charge Premium Rates for Niche"] },
+      { dayRange: "Day 21-30", title: "Passive Income", bullets: ["Start a Health Newsletter", "Monetize with Health Affiliates", "Create a Health Guide PDF Product"] }
+    ]},
+    { id: 5, accentColor: "#8b5cf6", badge: "COMMUNITY", timeLabel: "Month 6", title: "Health Content Strategist", description: "Move into high-value strategy and brand consulting for health businesses. Top health writers earn ₹50,000+/month.", days: [
+      { dayRange: "Day 1-15", title: "Strategy Skills", bullets: ["Content Strategy Framework", "SEO for Health Content", "Editorial Calendar Planning"] },
+      { dayRange: "Day 16-25", title: "Brand Consulting", bullets: ["Audit a Health Brand Content", "Propose Content Improvements", "Present Full Strategy Deck"] },
+      { dayRange: "Day 26-30", title: "Scale", bullets: ["Build a Health Writing Agency", "Hire Freelance Researchers", "Serve 5 or More Clients Monthly"] }
+    ]}
+  ],
+  "creative arts": [
+    { id: 1, accentColor: "#00d4aa", badge: "FREE", timeLabel: "Week 1-2", title: "Map Your Creative Skill to Income", description: "Identify which creative skill has the most immediate market demand and build a focused plan around it.", days: [
+      { dayRange: "Day 1-4", title: "Skill Audit", bullets: ["List All Your Creative Skills", "Research Market Demand for Each", "Identify Top 1 Skill to Lead With"] },
+      { dayRange: "Day 5-9", title: "Platform Research", bullets: ["YouTube for Long-form Content", "Instagram and TikTok for Short-form", "Fiverr for Freelance Creative Work"] },
+      { dayRange: "Day 10-14", title: "Content Foundation", bullets: ["Create Your Content Identity", "Choose a Consistent Posting Format", "Set Up All Creator Profiles"] }
+    ]},
+    { id: 2, accentColor: "#00b4d8", badge: "FREE", timeLabel: "Week 3-4", title: "Create 10 Portfolio Pieces", description: "Build a body of work that proves your skill. Clients and audiences pay for demonstrated ability, not potential.", days: [
+      { dayRange: "Day 15-18", title: "First Creations", bullets: ["Produce 5 Short-form Videos or Artworks", "Publish All Publicly Online", "Get Peer Feedback on Each"] },
+      { dayRange: "Day 19-22", title: "Refine Your Style", bullets: ["Study 3 Top Creators in Your Niche", "Identify What Makes Them Distinct", "Develop Your Own Visual Identity"] },
+      { dayRange: "Day 23-28", title: "Batch Production", bullets: ["Create 5 More Pieces", "Write Captions and Descriptions", "Post Consistently Every Day"] }
+    ]},
+    { id: 3, accentColor: "#f59e0b", badge: "INCOME", timeLabel: "Month 2", title: "Land First Paid Creative Work", description: "Get paid for commissions, brand content, or freelance creative gigs. Your first ₹1,000 changes your mindset forever.", days: [
+      { dayRange: "Day 1-7", title: "Client Outreach", bullets: ["DM 10 Small Brands Daily", "Pitch for Product Shoots or Content", "Offer First Work at Reduced Rate"] },
+      { dayRange: "Day 8-18", title: "Freelance Platforms", bullets: ["Fiverr Gig for Video Editing or Art", "Contra Profile Setup", "PeoplePerHour Listing"] },
+      { dayRange: "Day 19-30", title: "Deliver & Review", bullets: ["Over-deliver on First Project", "Request Written Testimonial", "Use Work as Portfolio Sample"] }
+    ]},
+    { id: 4, accentColor: "#f97316", badge: "INCOME", timeLabel: "Month 3", title: "Hit ₹10,000/month", description: "Turn creative skills into consistent client income or creator revenue. Multiple streams compound fast.", days: [
+      { dayRange: "Day 1-10", title: "Client Pipeline", bullets: ["Maintain 2–3 Ongoing Clients", "Weekly Content Calendar", "Automate Invoicing"] },
+      { dayRange: "Day 11-20", title: "Creator Revenue", bullets: ["Apply to YouTube Partner Program", "Instagram Creator Bonuses", "Brand Sponsorship Pitches"] },
+      { dayRange: "Day 21-30", title: "Digital Products", bullets: ["Sell Presets or Templates", "Create a Short Paid Course", "Sell Prints or Digital Art"] }
+    ]},
+    { id: 5, accentColor: "#8b5cf6", badge: "COMMUNITY", timeLabel: "Month 6", title: "Full-time Creator or Creative Director", description: "Build a sustainable income and influence through your creative brand. Top creators in India earn ₹1L–₹5L/month.", days: [
+      { dayRange: "Day 1-15", title: "Brand Authority", bullets: ["Reach 1,000 Followers on One Platform", "Maintain Consistent Posting Schedule", "Collaborate with Other Creators"] },
+      { dayRange: "Day 16-25", title: "Diversify Income", bullets: ["Merchandise or Print-on-Demand", "Paid Community or Patreon", "Workshop or Masterclass Launch"] },
+      { dayRange: "Day 26-30", title: "Scale", bullets: ["Delegate Editing or Production", "Build a Professional Brand Kit", "Pitch for Agency or Director Roles"] }
+    ]}
+  ],
+  "finance": [
+    { id: 1, accentColor: "#00d4aa", badge: "FREE", timeLabel: "Week 1-2", title: "Learn Financial Literacy & Excel", description: "Build the foundational skills every finance freelancer needs. Excel alone can earn you ₹15,000/month.", days: [
+      { dayRange: "Day 1-4", title: "Excel Mastery", bullets: ["VLOOKUP and XLOOKUP Functions", "Pivot Tables and Charts", "Financial Modelling Basics"] },
+      { dayRange: "Day 5-9", title: "Finance Fundamentals", bullets: ["Reading Balance Sheets", "Understanding P&L Statements", "Cash Flow Basics"] },
+      { dayRange: "Day 10-14", title: "Tools", bullets: ["Google Sheets for Finance", "Basic Power BI Dashboard", "Notion for Financial Tracking"] }
+    ]},
+    { id: 2, accentColor: "#00b4d8", badge: "FREE", timeLabel: "Week 3-4", title: "Build Finance Portfolio Projects", description: "Create 3 real financial models and dashboards. These become your proof of skill to every client.", days: [
+      { dayRange: "Day 15-18", title: "Personal Budget Model", bullets: ["Income vs. Expense Tracker", "Savings Goal Calculator", "Visual Dashboard in Excel"] },
+      { dayRange: "Day 19-22", title: "Business Finance Model", bullets: ["Startup Revenue Projections", "Break-even Analysis", "12-Month Cash Flow Forecast"] },
+      { dayRange: "Day 23-28", title: "Investment Tracker", bullets: ["Stock Portfolio Tracker", "Returns and Risk Calculator", "Visual Reporting Dashboard"] }
+    ]},
+    { id: 3, accentColor: "#f59e0b", badge: "INCOME", timeLabel: "Month 2", title: "Get First Finance Freelance Client", description: "Offer bookkeeping, Excel modelling or financial consulting. Small businesses desperately need this.", days: [
+      { dayRange: "Day 1-7", title: "Profile Setup", bullets: ["Upwork Finance Analyst Profile", "LinkedIn Optimization for Finance", "Fiverr Excel Expert Gig Creation"] },
+      { dayRange: "Day 8-18", title: "Client Outreach", bullets: ["Target Small Business Owners", "Pitch Bookkeeping Services", "Accounting Firm Outreach"] },
+      { dayRange: "Day 19-30", title: "First Delivery", bullets: ["Bookkeeping Template for Client", "Monthly Reporting Setup", "Invoice and Contract System"] }
+    ]},
+    { id: 4, accentColor: "#f97316", badge: "INCOME", timeLabel: "Month 3", title: "Hit ₹15,000/month", description: "Scale financial services into consistent monthly freelance revenue. Specialize to charge 3× more.", days: [
+      { dayRange: "Day 1-10", title: "Retain Clients", bullets: ["Monthly Reporting Retainer", "Automate Data Entry Tasks", "Expand to 3 Regular Clients"] },
+      { dayRange: "Day 11-20", title: "Specialize", bullets: ["Choose Tax, Bookkeeping or Modelling", "Get Tally or QuickBooks Certified", "Charge Premium for Specialization"] },
+      { dayRange: "Day 21-30", title: "Content Income", bullets: ["YouTube Personal Finance Channel", "Instagram Finance Tips Page", "Monetize via Affiliate or Courses"] }
+    ]},
+    { id: 5, accentColor: "#8b5cf6", badge: "COMMUNITY", timeLabel: "Month 6", title: "Financial Analyst or Finance Creator", description: "Build authority in finance as a consultant or creator. CFA-track analysts earn ₹50,000–₹1,50,000/month.", days: [
+      { dayRange: "Day 1-15", title: "Analyst Path", bullets: ["CFA Level 1 Preparation Begin", "Apply to Junior Analyst Roles", "Build Finance Portfolio on GitHub"] },
+      { dayRange: "Day 16-25", title: "Creator Path", bullets: ["30 Finance Content Posts Published", "Grow to 500 Engaged Followers", "Monetize Finance Newsletter"] },
+      { dayRange: "Day 26-30", title: "Scale", bullets: ["Launch a Paid Finance Course", "Build Excel Template Store", "Consult for Early-stage Startups"] }
+    ]}
+  ],
+  "agriculture": [
+    { id: 1, accentColor: "#00d4aa", badge: "FREE", timeLabel: "Week 1-2", title: "Learn AgriTech & Farm Content", description: "Discover how technology and content are transforming Indian agriculture. This niche is massively underserved online.", days: [
+      { dayRange: "Day 1-4", title: "AgriTech Overview", bullets: ["Precision Farming Basics", "Drone and IoT in Agriculture", "Government Schemes for Farmers"] },
+      { dayRange: "Day 5-9", title: "Content for Agriculture", bullets: ["YouTube Farm Vlogs Strategy", "Instagram AgriTech Page", "Writing for Agriculture Blogs"] },
+      { dayRange: "Day 10-14", title: "Tools", bullets: ["Canva for Farm Infographics", "Basic Video Editing on CapCut", "Google Trends for Agriculture Topics"] }
+    ]},
+    { id: 2, accentColor: "#00b4d8", badge: "FREE", timeLabel: "Week 3-4", title: "Build Agriculture Content Portfolio", description: "Create content that serves farmers, agri-brands and rural audiences. This audience is huge and growing fast.", days: [
+      { dayRange: "Day 15-18", title: "Video Content", bullets: ["3 Farm Tour or Crop Update Videos", "1 Government Scheme Explainer", "Thumbnail and Title Optimization"] },
+      { dayRange: "Day 19-22", title: "Written Content", bullets: ["3 Blog Posts on AgriTech Trends", "5 Instagram Infographics on Farming", "1 Case Study on Successful Farmer"] },
+      { dayRange: "Day 23-28", title: "Niche Selection", bullets: ["Choose Crop-specific Niche", "Region-specific Agriculture Focus", "Organic vs. Commercial Farming Angle"] }
+    ]},
+    { id: 3, accentColor: "#f59e0b", badge: "INCOME", timeLabel: "Month 2", title: "First Agriculture Income", description: "Get paid by agri-brands, NGOs or government programs for content or consulting. The market is wide open.", days: [
+      { dayRange: "Day 1-7", title: "Brand Outreach", bullets: ["Contact Seed and Fertilizer Companies", "Pitch to AgriTech Startups", "Reach Farmer Producer Organizations"] },
+      { dayRange: "Day 8-18", title: "Platform Income", bullets: ["YouTube Channel Monetization Setup", "Sell Farm Guides as PDFs", "Affiliate for AgriTech Products"] },
+      { dayRange: "Day 19-30", title: "First Payment", bullets: ["Write Sponsored AgriTech Article", "Produce a Brand Video", "Consult for Small Farm Operation"] }
+    ]},
+    { id: 4, accentColor: "#f97316", badge: "INCOME", timeLabel: "Month 3", title: "Hit ₹8,000/month", description: "Combine content, consulting and platform income from agriculture. Multiple streams add up fast.", days: [
+      { dayRange: "Day 1-10", title: "Multiple Income Streams", bullets: ["2 Brand Sponsorships", "1 Consulting Client", "Affiliate Commissions Growing"] },
+      { dayRange: "Day 11-20", title: "Grow Audience", bullets: ["Post Daily Agriculture Tips", "Engage with Farmer Communities", "Collaborate with Other AgriCreators"] },
+      { dayRange: "Day 21-30", title: "Government Income", bullets: ["Apply to ICAR AgriTech Programs", "Freelance for PM-KISAN Communication", "NGO Agriculture Content Work"] }
+    ]},
+    { id: 5, accentColor: "#8b5cf6", badge: "COMMUNITY", timeLabel: "Month 6", title: "AgriTech Consultant or Rural Creator", description: "Build authority in agricultural transformation and the rural digital economy. This space has almost no competition.", days: [
+      { dayRange: "Day 1-15", title: "Expertise Building", bullets: ["Deep Dive into 1 Crop or Technology", "Interview 5 Successful Farmers", "Publish Research Article Online"] },
+      { dayRange: "Day 16-25", title: "Brand Building", bullets: ["Reach 2,000 YouTube Subscribers", "Partner with 1 AgriTech Brand", "Speak at 1 Rural Technology Event"] },
+      { dayRange: "Day 26-30", title: "Scale", bullets: ["Launch a Farmer Training Program", "Build WhatsApp Community of Farmers", "Consult for Government Agriculture Projects"] }
+    ]}
+  ],
+  "other": [
+    { id: 1, accentColor: "#00d4aa", badge: "FREE", timeLabel: "Week 1-2", title: "Discover Your Highest-Value Skill", description: "Audit everything you can do and map it to what the market is paying for right now. Every person has a sellable skill.", days: [
+      { dayRange: "Day 1-4", title: "Personal Skill Audit", bullets: ["List 20 Things You Can Do Well", "Research Freelance Demand for Each", "Pick 1 Skill to Start Monetizing"] },
+      { dayRange: "Day 5-9", title: "Learn the Basics Fast", bullets: ["Find 3 Free Resources for Your Skill", "Complete 1 Short YouTube Course", "Practice Daily for 1 Hour"] },
+      { dayRange: "Day 10-14", title: "Digital Presence Setup", bullets: ["Create LinkedIn Profile", "Set Up Fiverr or Freelancer Account", "Write a Simple One-Line Service Offer"] }
+    ]},
+    { id: 2, accentColor: "#00b4d8", badge: "FREE", timeLabel: "Week 3-4", title: "Build Proof of Your Skill", description: "Create 5 examples of your work that you can show any client. You cannot get hired for work no one has seen.", days: [
+      { dayRange: "Day 15-18", title: "Create Sample Work", bullets: ["Produce 3 Examples of Your Best Work", "Make Each Example Solve a Real Problem", "Save All in a Google Drive Portfolio Folder"] },
+      { dayRange: "Day 19-22", title: "Publish It", bullets: ["Post Samples on LinkedIn", "Share on Relevant Facebook Groups", "Upload to Portfolio Platform"] },
+      { dayRange: "Day 23-28", title: "Get Feedback", bullets: ["Ask 5 People to Review Your Work", "Note All Improvement Suggestions", "Revise and Repost Stronger Versions"] }
+    ]},
+    { id: 3, accentColor: "#f59e0b", badge: "INCOME", timeLabel: "Month 2", title: "Land Your First Paid Project", description: "Get someone to pay you for your skill. Even ₹500 proves the model. From here it only scales up.", days: [
+      { dayRange: "Day 1-7", title: "Find Clients", bullets: ["Tell Everyone in Your Network What You Offer", "Post Your Service Offer on 3 Platforms", "Join 5 Facebook or WhatsApp Business Groups"] },
+      { dayRange: "Day 8-18", title: "Outreach", bullets: ["Send 10 Messages Per Day Offering Help", "Follow Up Once on Every Non-Reply", "Offer a Free Small Sample to First Client"] },
+      { dayRange: "Day 19-30", title: "First Delivery", bullets: ["Deliver Better Than Promised", "Ask for a Written Testimonial", "Ask for One Referral from First Client"] }
+    ]},
+    { id: 4, accentColor: "#f97316", badge: "INCOME", timeLabel: "Month 3", title: "Hit ₹8,000/month", description: "Turn your first client into a pipeline. Consistency and follow-up are the only secrets to scaling income.", days: [
+      { dayRange: "Day 1-10", title: "Build Pipeline", bullets: ["Maintain 3 Active Client Conversations", "Follow Up on Every Past Lead", "Create a Simple WhatsApp Broadcast List"] },
+      { dayRange: "Day 11-20", title: "Raise Value", bullets: ["Improve Your Skill with Daily Practice", "Bundle Services into a Package", "Increase Rate by 30% for New Clients"] },
+      { dayRange: "Day 21-30", title: "Automate Basics", bullets: ["Create Invoice Template", "Build a Simple Portfolio PDF", "Set Up Auto-reply for Inquiries"] }
+    ]},
+    { id: 5, accentColor: "#8b5cf6", badge: "COMMUNITY", timeLabel: "Month 6", title: "Freelance Professional in Your Niche", description: "You are now a legitimate independent professional. Build your reputation, raise your rates, and never look back.", days: [
+      { dayRange: "Day 1-15", title: "Deepen Your Skill", bullets: ["Take One Paid Course in Your Field", "Get a Free Certification Online", "Document Everything You Have Learned"] },
+      { dayRange: "Day 16-25", title: "Build Reputation", bullets: ["Collect 5 Public Testimonials", "Post Your Wins on LinkedIn Weekly", "Reach Out to Past Clients for Repeat Work"] },
+      { dayRange: "Day 26-30", title: "Scale or Specialize", bullets: ["Choose to Niche Down Further or Scale Up", "Hire One Helper for Basic Tasks", "Set a ₹20,000/month Income Target for Month 7"] }
+    ]}
+  ]
+};
+
+const hints = {
+  technology: "Build apps, automate tasks, and freelance on global platforms — highest demand skill in 2026.",
+  design: "Visual skills pay fast. Canva + Figma mastery can get you clients in 30 days.",
+  business: "Consulting and strategy skills work in any economy. Fastest path to high-ticket income.",
+  healthcare: "Health content and telemedicine support are massively underserved online.",
+  "creative arts": "Creators and brands need video, art, and content every single day.",
+  finance: "Excel and financial modelling are evergreen skills — always in demand.",
+  agriculture: "AgriTech and rural digital economy have almost zero competition online.",
+  other: "A flexible path combining digital skills, communication, and online income — works for anyone."
+};
+
+document.getElementById('interestSelect').addEventListener('change', function() {
+  document.getElementById('fieldHint').textContent = hints[this.value] || '';
+});
+
+document.getElementById('generateBtn').addEventListener('click', generateRoadmap);
+
+async function generateRoadmap() {
+  const age = document.getElementById('ageInput').value.trim();
+  const interest = document.getElementById('interestSelect').value;
+  const urgency = document.getElementById('urgencySelect').value;
+  const internet = document.getElementById('internetSelect').value;
+  const skill = document.getElementById('skillSelect').value;
+  const time = document.getElementById('timeSelect').value;
+  const risk = document.getElementById('riskSelect').value;
+
+  let hasError = false;
+  if (!age) {
+    const el = document.getElementById('ageInput');
+    el.classList.add('field-error');
+    setTimeout(() => el.classList.remove('field-error'), 500);
+    hasError = true;
+  }
+  if (!interest) {
+    const el = document.getElementById('interestSelect');
+    el.classList.add('field-error');
+    setTimeout(() => el.classList.remove('field-error'), 500);
+    hasError = true;
+  }
+  if (hasError) return;
+
+  const generateBtn = document.getElementById('generateBtn');
+  const originalBtnText = generateBtn.textContent;
+  generateBtn.disabled = true;
+  generateBtn.textContent = 'Generating...';
+
+  document.getElementById('roadmapOutput').style.display = 'none';
+  const progressPanel = document.getElementById('progressPanel');
+  progressPanel.style.display = 'block';
+  const fill = document.getElementById('progressFill');
+  fill.style.width = '0%';
+  setTimeout(() => { fill.style.width = '70%'; }, 50);
+
+  try {
+    const response = await fetch('http://localhost:5000/api/generate-roadmap', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ age, primaryInterest: interest, incomeUrgency: urgency, internetAccess: internet, skillLevel: skill, timeAvailability: time, riskTolerance: risk })
+    });
+
+    if (!response.ok) throw new Error('API Error');
+
+    const data = await response.json();
+    const cards = data.roadmap;
+    const successProbability = data.successProbability;
+
+    fill.style.width = '100%';
+    
+    let txt = `SKILLFALL ROADMAP — ${interest.toUpperCase()}\n\n`;
+    cards.forEach(c => {
+      txt += `${c.id}. ${c.title} (${c.timeLabel}) [${c.badge}]\n${c.description}\n`;
+      c.days.forEach(d => {
+        txt += `  ${d.dayRange} — ${d.title}\n`;
+        d.bullets.forEach(b => { txt += `    • ${b}\n`; });
+      });
+      txt += `\n`;
+    });
+    window._currentRoadmapText = txt;
+
+    setTimeout(() => {
+      progressPanel.style.display = 'none';
+      renderRoadmap(cards);
+      calculateSuccessScore(skill, time, internet, urgency, risk, successProbability);
+      document.getElementById('roadmapOutput').style.display = 'block';
+      showToast('✅ Your AI-powered survival roadmap is ready!');
+      generateBtn.disabled = false;
+      generateBtn.textContent = originalBtnText;
+    }, 500);
+
+  } catch (error) {
+    console.error('Backend error:', error);
+    fill.style.width = '100%';
+    const key = interest.toLowerCase().trim();
+    const cards = roadmapData[key] || roadmapData["other"];
+    setTimeout(() => {
+      progressPanel.style.display = 'none';
+      renderRoadmap(cards);
+      calculateSuccessScore(skill, time, internet, urgency, risk);
+      document.getElementById('roadmapOutput').style.display = 'block';
+      showToast('⚠️ Using local fallback (Backend not reachable)');
+      generateBtn.disabled = false;
+      generateBtn.textContent = originalBtnText;
+    }, 500);
+  }
+}
+
+function renderRoadmap(cards) {
+  const container = document.getElementById('cardsContainer');
+  container.innerHTML = '';
+  let openCardId = null;
+
+  cards.forEach((card, index) => {
+    const badgeColors = {
+      FREE: { bg: '#00d4aa22', text: '#00d4aa', border: '#00d4aa44' },
+      INCOME: { bg: '#f59e0b22', text: '#f59e0b', border: '#f59e0b44' },
+      COMMUNITY: { bg: '#8b5cf622', text: '#8b5cf6', border: '#8b5cf644' }
+    };
+    const bc = badgeColors[card.badge];
+
+    const cardEl = document.createElement('div');
+    cardEl.className = 'milestone-card';
+    cardEl.style.cssText = `
+      background:#13131f; border:1px solid #1e1e30; border-top:3px solid ${card.accentColor};
+      border-radius:12px; padding:24px; cursor:pointer;
+      opacity:0; transform:translateX(30px); margin-bottom:12px;
+    `;
+
+    cardEl.innerHTML = `
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:36px; height:36px; border-radius:50%; border:2px solid ${card.accentColor}; color:${card.accentColor}; font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">${card.id}</div>
+          <span style="color:#8888aa; font-size:13px; font-weight:500;">${card.timeLabel}</span>
+        </div>
+        <span style="background:${bc.bg}; color:${bc.text}; border:1px solid ${bc.border}; border-radius:50px; padding:4px 10px; font-size:11px; font-weight:700; letter-spacing:1px;">${card.badge}</span>
+      </div>
+      <div style="font-size:17px; font-weight:700; color:#ffffff; margin-bottom:8px;">${card.title}</div>
+      <div style="font-size:14px; color:#8888aa; line-height:1.6; margin-bottom:12px;">${card.description}</div>
+      <div style="font-size:12px; color:#555577;">▼ Click to see day-by-day breakdown</div>
+    `;
+
+    setTimeout(() => {
+      cardEl.style.transition = 'opacity 0.4s ease, transform 0.4s ease, border-color 0.2s, box-shadow 0.2s';
+      cardEl.style.opacity = '1';
+      cardEl.style.transform = 'translateX(0)';
+    }, index * 200);
+
+    cardEl.addEventListener('mouseenter', () => {
+      cardEl.style.borderColor = `${card.accentColor}99`;
+      cardEl.style.borderTopColor = card.accentColor;
+      cardEl.style.transform = 'translateY(-2px)';
+    });
+    cardEl.addEventListener('mouseleave', () => {
+      cardEl.style.borderColor = '#1e1e30';
+      cardEl.style.borderTopColor = card.accentColor;
+      cardEl.style.transform = 'translateY(0)';
+    });
+
+    cardEl.addEventListener('click', () => {
+      const existing = document.getElementById('dayBreakdown');
+      if (existing) existing.remove();
+
+      if (openCardId === card.id) { openCardId = null; return; }
+      openCardId = card.id;
+
+      const breakdown = document.createElement('div');
+      breakdown.id = 'dayBreakdown';
+      breakdown.style.cssText = `
+        background:#0f0f1a; border:1px solid #1e1e30; border-radius:12px;
+        padding:24px; margin-bottom:12px; overflow:hidden;
+        max-height:0; opacity:0;
+        transition: max-height 0.35s ease, opacity 0.35s ease;
+      `;
+
+      const grid = document.createElement('div');
+      grid.className = 'day-grid';
+      grid.style.cssText = 'display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;';
+
+      card.days.forEach(day => {
+        const dayCard = document.createElement('div');
+        dayCard.style.cssText = 'background:#13131f; border:1px solid #2e2e45; border-radius:10px; padding:20px;';
+        dayCard.innerHTML = `
+          <div style="color:${card.accentColor}; font-size:12px; font-weight:600; letter-spacing:1px; margin-bottom:8px;">${day.dayRange}</div>
+          <div style="color:#ffffff; font-size:15px; font-weight:600; margin-bottom:12px;">${day.title}</div>
+          ${day.bullets.map(b => `<div style="color:#8888aa; font-size:13px; padding-left:12px; border-left:2px solid ${card.accentColor}44; margin-bottom:6px; line-height:1.5;">${b}</div>`).join('')}
+        `;
+        grid.appendChild(dayCard);
+      });
+
+      breakdown.appendChild(grid);
+      cardEl.insertAdjacentElement('afterend', breakdown);
+
+      setTimeout(() => {
+        breakdown.style.maxHeight = '800px';
+        breakdown.style.opacity = '1';
+      }, 20);
+    });
+
+    container.appendChild(cardEl);
+  });
+}
+
+function calculateSuccessScore(skill, time, internet, urgency, risk, aiProbability) {
+  let score = aiProbability || 60;
+  if (!aiProbability) {
+    if (skill === 'intermediate') score += 8;
+    if (skill === 'advanced') score += 15;
+    if (time === '3-4') score += 8;
+    if (time === '5-6') score += 12;
+    if (time === 'fulltime') score += 18;
+    if (internet === 'high') score += 5;
+    if (internet === 'medium') score += 3;
+    if (urgency === 'immediate' && skill === 'beginner') score -= 12;
+    if (risk === 'high') score += 5;
+  }
+  score = Math.min(95, Math.max(35, score));
+
+  const labels = {
+    high: 'Excellent Conditions — High success probability',
+    good: 'Strong Potential — Stay consistent',
+    medium: 'Challenging but Achievable — Focus is key',
+    low: 'Tough Road ahead — but SkillFall was built exactly for this'
+  };
+  const label = score >= 80 ? labels.high : score >= 65 ? labels.good : score >= 50 ? labels.medium : labels.low;
+
+  document.getElementById('successPercent').textContent = score + '%';
+  document.getElementById('successLabel').textContent = label;
+  document.getElementById('successFill').style.width = '0%';
+  setTimeout(() => {
+    document.getElementById('successFill').style.width = score + '%';
+  }, 100);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  if (msg) toast.textContent = msg;
+  toast.style.transform = 'translateX(0)';
+  toast.style.opacity = '1';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => {
+    toast.style.transform = 'translateX(120%)';
+    toast.style.opacity = '0';
+  }, 4000);
+}
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const text = window._currentRoadmapText || '';
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => showToast()).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    showToast();
+  });
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.getElementById('roadmapOutput').style.display = 'none';
+  document.getElementById('progressPanel').style.display = 'none';
+  ['ageInput'].forEach(id => document.getElementById(id).value = '');
+  ['interestSelect','urgencySelect','internetSelect','skillSelect','timeSelect','riskSelect'].forEach(id => {
+    document.getElementById(id).selectedIndex = 0;
+  });
+  document.getElementById('fieldHint').textContent = '';
+});
+
+// COUNTUP
+function animateCountUp(el, target, prefix, suffix) {
+  let start = 0;
+  const duration = 1500;
+  const step = Math.max(target / (duration / 16), 0.1);
+  if (target === 0) { el.textContent = prefix + '0' + suffix; return; }
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { start = target; clearInterval(timer); }
+    el.textContent = prefix + Math.floor(start) + suffix;
+  }, 16);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCountUp(document.getElementById('stat1'), 47, '', 'M+');
+      document.getElementById('stat2').textContent = '₹0';
+      animateCountUp(document.getElementById('stat3'), 68, '', '%');
+      statsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+statsObserver.observe(document.getElementById('statsSection'));
+
+// PARTICLES
+(function() {
+  const colors = ['#7c3aed', '#3b82f6', '#00d4aa'];
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 2 + Math.random() * 4;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = (60 + Math.random() * 40) + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animation = `float ${8 + Math.random() * 12}s linear infinite`;
+    p.style.animationDelay = (Math.random() * 8) + 's';
+    container.appendChild(p);
+  }
+})();
+
+// SCROLLSPY
+const sections = ['problem', 'ai-rebuilder', 'how-it-works', 'future'];
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.nav-links a[data-section="${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.5 });
+sections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) navObserver.observe(el);
+});
+
+// TICKER
+(function() {
+  const messages = [
+    "🎉 Anshika from Delhi just landed her first freelance client",
+    "💰 Yashvee earned ₹8,000 in Month 2 following the Tech roadmap",
+    "🚀 Seerat completed her design portfolio in Week 3",
+    "🌟 Rahul from Mumbai hit ₹15,000/month as a freelance developer",
+    "📈 Priya switched to AgriTech content and got 3 brand deals",
+    "🎓 Arjun dropped out, followed SkillFall, now earns ₹22,000/month"
+  ];
+  const track = document.getElementById('tickerTrack');
+  const html = messages.map(m => `<span class="ticker-item">${m}<span class="dot">•</span></span>`).join('');
+  track.innerHTML = html + html;
+})();
+
+// CHATBOT LOGIC
+(function() {
+  const trigger = document.getElementById('chatTrigger');
+  const windowEl = document.getElementById('chatWindow');
+  const closeBtn = document.getElementById('closeChat');
+  const sendBtn = document.getElementById('chatSendBtn');
+  const input = document.getElementById('chatInput');
+  const body = document.getElementById('chatBody');
+
+  let chatHistory = [];
+
+  trigger.addEventListener('click', () => {
+    const isVisible = windowEl.style.display === 'flex';
+    windowEl.style.display = isVisible ? 'none' : 'flex';
+    if (!isVisible) input.focus();
+  });
+
+  closeBtn.addEventListener('click', () => {
+    windowEl.style.display = 'none';
+  });
+
+  async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    // Add user message to UI
+    addMessage(text, 'user');
+    input.value = '';
+
+    // Add loading indicator
+    const loadingId = addLoadingIndicator();
+
+    try {
+      const response = await fetch('http://localhost:5000/api/recovery-assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, history: chatHistory })
+      });
+
+      const data = await response.json();
+      removeLoadingIndicator(loadingId);
+
+      if (data.text) {
+        addMessage(data.text, 'bot');
+        chatHistory.push({ role: 'user', text: text });
+        chatHistory.push({ role: 'bot', text: data.text });
+      } else {
+        addMessage("I'm sorry, I'm having trouble connecting right now. Let's try again in a moment.", 'bot');
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      removeLoadingIndicator(loadingId);
+      addMessage("I'm sorry, I'm having trouble connecting right now. Please ensure the backend is running.", 'bot');
+    }
+  }
+
+  function addMessage(text, role) {
+    const msg = document.createElement('div');
+    msg.className = `chat-message msg-${role}`;
+    msg.textContent = text;
+    body.appendChild(msg);
+    body.scrollTop = body.scrollHeight;
+  }
+
+  function addLoadingIndicator() {
+    const id = 'loading-' + Date.now();
+    const loading = document.createElement('div');
+    loading.id = id;
+    loading.className = 'chat-message msg-bot typing-dots';
+    loading.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+    body.appendChild(loading);
+    body.scrollTop = body.scrollHeight;
+    return id;
+  }
+
+  function removeLoadingIndicator(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
+})();
+</script>
+</body>
+</html>
