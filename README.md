@@ -8,7 +8,6 @@ SkillFall is an AI-powered skill development and career guidance platform design
 
 Many students struggle with confusion about career choices, lack of proper mentorship, unstructured learning resources, and no clear roadmap for skill development. SkillFall solves this problem by providing a smart, guided, and personalized platform that bridges the gap between learning and real-world opportunities.
 
----
 
 ## Problem Statement
 
@@ -21,7 +20,6 @@ Students often face:
 
 This creates confusion, wasted effort, and delayed career growth.
 
----
 
 ## Our Solution
 
@@ -34,7 +32,6 @@ SkillFall helps users by offering:
 
 Our goal is to make learning smarter, faster, and more structured.
 
----
 
 ## ✨ Key Features
 
@@ -50,7 +47,7 @@ Track completed milestones and monitor overall skill growth.
 ### Smart Dashboard
 An interactive and user-friendly dashboard for managing learning progress.
 
----
+
 ## 🛠 Tech Stack
 
 ### Frontend
@@ -76,7 +73,7 @@ An interactive and user-friendly dashboard for managing learning progress.
 
 ### Deployment
 - Planned for Vercel / Render
-- 
+ 
 ## ⚙ System Workflow
 
 1. User enters career interests, goals, and skill preferences  
